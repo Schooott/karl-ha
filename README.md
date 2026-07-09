@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="custom_brands/custom_integrations/cali/icon@2x.png" width="160" alt="Cali" />
+  <img src="custom_components/cali/brand/icon@2x.png" width="160" alt="Cali" />
 </p>
 
 <h1 align="center">Cali für Home Assistant</h1>
@@ -57,12 +57,8 @@ data:
 - `cali/action` – `{entity_id, action, params?}`, serverseitig whitelisted
 - `cali/subscribe` – pusht `notify`-Events (aus `cali.speak`) und `state`-Updates freigegebener Entities
 
-## Icon in HACS / Home Assistant
+## Icon in Home Assistant
 
-Die Icons kommen zentral aus dem [home-assistant/brands](https://github.com/home-assistant/brands)-Repo.
-Die fertigen Dateien liegen unter `custom_brands/custom_integrations/cali/` –
-für die Anzeige einmalig als PR einreichen:
-
-1. https://github.com/home-assistant/brands forken
-2. Ordner `custom_integrations/cali/` mit `icon.png` (256×256) und `icon@2x.png` (512×512) anlegen (Web-UI: „Add file → Upload files“)
-3. PR erstellen – nach dem Merge zeigen HACS und HA das Logo automatisch.
+Die Icons liegen direkt in der Integration (`custom_components/cali/brand/`) und
+werden ab Home Assistant 2026.3 über die lokale Brands-API ausgeliefert – kein
+PR ans brands-Repo nötig.
