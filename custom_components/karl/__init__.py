@@ -18,11 +18,13 @@ from homeassistant.helpers import (
     device_registry as dr,
     entity_registry as er,
 )
+from homeassistant.helpers.event import async_call_later
 
 from . import websocket
 from .const import (
     CONF_ENTITIES,
     DOMAIN,
+    EVENT_KARL_ENTITIES_CHANGED,
     EVENT_KARL_NOTIFY,
     KARL_LABEL,
     VALID_EMOTIONS,
@@ -50,6 +52,8 @@ class ExposureCache:
         self._hass = hass
         self._entry = entry
         self._cached: set[str] | None = None
+        self._last_known: set[str] = set()
+        self._debounce_cancel = None
         self._unsubs = [
             hass.bus.async_listen(
                 er.EVENT_ENTITY_REGISTRY_UPDATED, self._invalidate
@@ -61,11 +65,26 @@ class ExposureCache:
         ]
 
     @callback
-    def _invalidate(self, _event) -> None:
+    def _invalidate(self, _event=None) -> None:
+        if self._cached is not None:
+            self._last_known = self._cached
         self._cached = None
+        # Debounced prüfen, ob sich die Freigabemenge wirklich geändert hat –
+        # Registry-Events feuern für JEDE Entity im System.
+        if self._debounce_cancel is not None:
+            self._debounce_cancel()
+        self._debounce_cancel = async_call_later(self._hass, 2.0, self._emit_if_changed)
+
+    @callback
+    def _emit_if_changed(self, _now) -> None:
+        self._debounce_cancel = None
+        new = self.entity_ids()
+        if new != self._last_known:
+            self._last_known = new
+            self._hass.bus.async_fire(EVENT_KARL_ENTITIES_CHANGED)
 
     async def _entry_updated(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
-        self._cached = None
+        self._invalidate()
 
     @callback
     def entity_ids(self) -> set[str]:
@@ -92,6 +111,9 @@ class ExposureCache:
 
     @callback
     def shutdown(self) -> None:
+        if self._debounce_cancel is not None:
+            self._debounce_cancel()
+            self._debounce_cancel = None
         for unsub in self._unsubs:
             unsub()
 

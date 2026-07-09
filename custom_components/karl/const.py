@@ -5,6 +5,9 @@ DOMAIN = "karl"
 # Event, das Karl über seine WebSocket-Subscription empfängt
 EVENT_KARL_NOTIFY = "karl_notify"
 
+# Internes Event: die Freigabemenge hat sich geändert → Clients laden neu
+EVENT_KARL_ENTITIES_CHANGED = "karl_entities_changed"
+
 # Entities mit diesem Label (auf Entity ODER Gerät) sind für Karl freigegeben,
 # zusätzlich zur expliziten Auswahl in den Integrations-Optionen.
 KARL_LABEL = "karl"

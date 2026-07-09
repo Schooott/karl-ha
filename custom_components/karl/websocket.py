@@ -9,7 +9,12 @@ import voluptuous as vol
 from homeassistant.components import websocket_api
 from homeassistant.core import Event, HomeAssistant, callback
 
-from .const import ALLOWED_ACTIONS, DOMAIN, EVENT_KARL_NOTIFY
+from .const import (
+    ALLOWED_ACTIONS,
+    DOMAIN,
+    EVENT_KARL_ENTITIES_CHANGED,
+    EVENT_KARL_NOTIFY,
+)
 
 
 @callback
@@ -122,13 +127,23 @@ def ws_subscribe(
             )
         )
 
+    @callback
+    def forward_entities_changed(event: Event) -> None:
+        connection.send_message(
+            websocket_api.event_message(msg["id"], {"event": "entities_changed"})
+        )
+
     unsub_notify = hass.bus.async_listen(EVENT_KARL_NOTIFY, forward_notify)
     unsub_state = hass.bus.async_listen("state_changed", forward_state)
+    unsub_changed = hass.bus.async_listen(
+        EVENT_KARL_ENTITIES_CHANGED, forward_entities_changed
+    )
 
     @callback
     def unsubscribe() -> None:
         unsub_notify()
         unsub_state()
+        unsub_changed()
 
     connection.subscriptions[msg["id"]] = unsubscribe
     connection.send_result(msg["id"])
