@@ -19,14 +19,16 @@ speak:
           options:
             - neutral
             - happy
-            - excited
-            - sad
-            - bored
+            - wink
+            - love
             - surprised
-            - confused
+            - crazy
+            - sceptic
             - tired
-            - annoyed
-            - proud
+            - sad
+            - denying
+            - angry
+            - broken
     wake:
       name: Aufwecken
       description: Karl einblenden, falls er gerade versteckt ist.

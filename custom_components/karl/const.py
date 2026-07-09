@@ -17,14 +17,16 @@ CONF_ENTITIES = "entities"
 VALID_EMOTIONS = [
     "neutral",
     "happy",
-    "excited",
-    "sad",
-    "bored",
+    "wink",
+    "love",
     "surprised",
-    "confused",
+    "crazy",
+    "sceptic",
     "tired",
-    "annoyed",
-    "proud",
+    "sad",
+    "denying",
+    "angry",
+    "broken",
 ]
 
 # Serverseitige Whitelist: Welche Aktion darf Karl pro Domain ausführen und
