@@ -1,4 +1,4 @@
-"""WebSocket-API für Karl: Entities lesen, Aktionen ausführen, Events abonnieren."""
+"""WebSocket-API für Cali: Entities lesen, Aktionen ausführen, Events abonnieren."""
 
 from __future__ import annotations
 
@@ -12,8 +12,8 @@ from homeassistant.core import Event, HomeAssistant, callback
 from .const import (
     ALLOWED_ACTIONS,
     DOMAIN,
-    EVENT_KARL_ENTITIES_CHANGED,
-    EVENT_KARL_NOTIFY,
+    EVENT_CALI_ENTITIES_CHANGED,
+    EVENT_CALI_NOTIFY,
 )
 
 
@@ -24,12 +24,12 @@ def async_register(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_subscribe)
 
 
-@websocket_api.websocket_command({vol.Required("type"): "karl/entities"})
+@websocket_api.websocket_command({vol.Required("type"): "cali/entities"})
 @callback
 def ws_entities(
     hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict[str, Any]
 ) -> None:
-    """Alle für Karl freigegebenen Entities, kompakt aufbereitet."""
+    """Alle für Cali freigegebenen Entities, kompakt aufbereitet."""
     from . import entity_payload, exposed_entity_ids
 
     entities = [
@@ -42,7 +42,7 @@ def ws_entities(
 
 @websocket_api.websocket_command(
     {
-        vol.Required("type"): "karl/action",
+        vol.Required("type"): "cali/action",
         vol.Required("entity_id"): str,
         vol.Required("action"): str,
         vol.Optional("params"): dict,
@@ -61,7 +61,7 @@ async def ws_action(
 
     if entity_id not in exposed_entity_ids(hass):
         connection.send_error(
-            msg["id"], "not_exposed", f"{entity_id} ist nicht für Karl freigegeben."
+            msg["id"], "not_exposed", f"{entity_id} ist nicht für Cali freigegeben."
         )
         return
 
@@ -90,12 +90,12 @@ async def ws_action(
     )
 
 
-@websocket_api.websocket_command({vol.Required("type"): "karl/subscribe"})
+@websocket_api.websocket_command({vol.Required("type"): "cali/subscribe"})
 @callback
 def ws_subscribe(
     hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict[str, Any]
 ) -> None:
-    """Abonniert karl_notify-Events und Zustandsänderungen freigegebener Entities."""
+    """Abonniert cali_notify-Events und Zustandsänderungen freigegebener Entities."""
     from . import entity_payload, exposed_entity_ids
 
     @callback
@@ -133,10 +133,10 @@ def ws_subscribe(
             websocket_api.event_message(msg["id"], {"event": "entities_changed"})
         )
 
-    unsub_notify = hass.bus.async_listen(EVENT_KARL_NOTIFY, forward_notify)
+    unsub_notify = hass.bus.async_listen(EVENT_CALI_NOTIFY, forward_notify)
     unsub_state = hass.bus.async_listen("state_changed", forward_state)
     unsub_changed = hass.bus.async_listen(
-        EVENT_KARL_ENTITIES_CHANGED, forward_entities_changed
+        EVENT_CALI_ENTITIES_CHANGED, forward_entities_changed
     )
 
     @callback

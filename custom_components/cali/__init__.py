@@ -1,9 +1,9 @@
-"""Karl – macOS-Desktop-Assistent als Home-Assistant-Gegenstelle.
+"""Cali – macOS-Desktop-Assistent als Home-Assistant-Gegenstelle.
 
 Stellt bereit:
-- WebSocket-Commands karl/entities, karl/action, karl/subscribe
-- Service karl.speak als Benachrichtigungsziel für Automationen
-- Freigabe von Entities über das Label "karl" oder die Integrations-Optionen
+- WebSocket-Commands cali/entities, cali/action, cali/subscribe
+- Service cali.speak als Benachrichtigungsziel für Automationen
+- Freigabe von Entities über das Label "cali" oder die Integrations-Optionen
 """
 
 from __future__ import annotations
@@ -24,9 +24,9 @@ from . import websocket
 from .const import (
     CONF_ENTITIES,
     DOMAIN,
-    EVENT_KARL_ENTITIES_CHANGED,
-    EVENT_KARL_NOTIFY,
-    KARL_LABEL,
+    EVENT_CALI_ENTITIES_CHANGED,
+    EVENT_CALI_NOTIFY,
+    CALI_LABEL,
     VALID_EMOTIONS,
 )
 
@@ -42,9 +42,9 @@ SPEAK_SCHEMA = vol.Schema(
 
 
 class ExposureCache:
-    """Cached Menge der für Karl freigegebenen entity_ids.
+    """Cached Menge der für Cali freigegebenen entity_ids.
 
-    Quelle: Label "karl" auf Entities oder Geräten + explizite Auswahl in den
+    Quelle: Label "cali" auf Entities oder Geräten + explizite Auswahl in den
     Integrations-Optionen. Invalidiert sich bei Registry- und Options-Änderungen.
     """
 
@@ -81,7 +81,7 @@ class ExposureCache:
         new = self.entity_ids()
         if new != self._last_known:
             self._last_known = new
-            self._hass.bus.async_fire(EVENT_KARL_ENTITIES_CHANGED)
+            self._hass.bus.async_fire(EVENT_CALI_ENTITIES_CHANGED)
 
     async def _entry_updated(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
         self._invalidate()
@@ -98,12 +98,12 @@ class ExposureCache:
         labeled_devices = {
             device.id
             for device in dev_reg.devices.values()
-            if KARL_LABEL in device.labels
+            if CALI_LABEL in device.labels
         }
         for entity in ent_reg.entities.values():
             if entity.disabled_by is not None or entity.hidden_by is not None:
                 continue
-            if KARL_LABEL in entity.labels or entity.device_id in labeled_devices:
+            if CALI_LABEL in entity.labels or entity.device_id in labeled_devices:
                 ids.add(entity.entity_id)
 
         self._cached = ids
@@ -124,7 +124,7 @@ async def async_setup(hass: HomeAssistant, config) -> bool:
 
     async def handle_speak(call: ServiceCall) -> None:
         hass.bus.async_fire(
-            EVENT_KARL_NOTIFY,
+            EVENT_CALI_NOTIFY,
             {
                 "message": call.data["message"],
                 "emotion": call.data.get("emotion"),
@@ -159,7 +159,7 @@ def exposed_entity_ids(hass: HomeAssistant) -> set[str]:
 
 @callback
 def entity_payload(hass: HomeAssistant, entity_id: str) -> dict | None:
-    """Kompakte Beschreibung einer Entity für Karls Cache."""
+    """Kompakte Beschreibung einer Entity für Calis Cache."""
     state = hass.states.get(entity_id)
     ent_reg = er.async_get(hass)
     dev_reg = dr.async_get(hass)

@@ -1,16 +1,16 @@
-"""Konstanten für die Karl-Integration."""
+"""Konstanten für die Cali-Integration."""
 
-DOMAIN = "karl"
+DOMAIN = "cali"
 
-# Event, das Karl über seine WebSocket-Subscription empfängt
-EVENT_KARL_NOTIFY = "karl_notify"
+# Event, das Cali über seine WebSocket-Subscription empfängt
+EVENT_CALI_NOTIFY = "cali_notify"
 
 # Internes Event: die Freigabemenge hat sich geändert → Clients laden neu
-EVENT_KARL_ENTITIES_CHANGED = "karl_entities_changed"
+EVENT_CALI_ENTITIES_CHANGED = "cali_entities_changed"
 
-# Entities mit diesem Label (auf Entity ODER Gerät) sind für Karl freigegeben,
+# Entities mit diesem Label (auf Entity ODER Gerät) sind für Cali freigegeben,
 # zusätzlich zur expliziten Auswahl in den Integrations-Optionen.
-KARL_LABEL = "karl"
+CALI_LABEL = "cali"
 
 CONF_ENTITIES = "entities"
 
@@ -29,7 +29,7 @@ VALID_EMOTIONS = [
     "broken",
 ]
 
-# Serverseitige Whitelist: Welche Aktion darf Karl pro Domain ausführen und
+# Serverseitige Whitelist: Welche Aktion darf Cali pro Domain ausführen und
 # auf welchen Service wird sie abgebildet. Domains ohne Eintrag (z. B. lock,
 # alarm_control_panel, sensor) sind read-only – Status ja, Steuern nein.
 # Format: aktion -> (service_domain, service_name, erlaubte_parameter)

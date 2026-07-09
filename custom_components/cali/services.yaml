@@ -1,19 +1,19 @@
 speak:
-  name: Karl sprechen lassen
+  name: Cali sprechen lassen
   description: >-
-    Lässt Karl (den Desktop-Assistenten) einen Text sprechen. Nutzbar als
+    Lässt Cali (die Desktop-Assistentin) einen Text sprechen. Nutzbar als
     Benachrichtigungsziel in Automationen – z. B. "Die Waschmaschine ist fertig."
   fields:
     message:
       name: Nachricht
-      description: Der Text, den Karl vorlesen soll.
+      description: Der Text, den Cali vorlesen soll.
       required: true
       selector:
         text:
           multiline: true
     emotion:
       name: Emotion
-      description: Gesichtsausdruck, mit dem Karl die Nachricht spricht.
+      description: Gesichtsausdruck, mit dem Cali die Nachricht spricht.
       selector:
         select:
           options:
@@ -31,7 +31,7 @@ speak:
             - broken
     wake:
       name: Aufwecken
-      description: Karl einblenden, falls er gerade versteckt ist.
+      description: Cali einblenden, falls er gerade versteckt ist.
       default: true
       selector:
         boolean:

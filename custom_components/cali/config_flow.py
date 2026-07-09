@@ -1,4 +1,4 @@
-"""Config- und Options-Flow: Freigabe von Entities für Karl."""
+"""Config- und Options-Flow: Freigabe von Entities für Cali."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from homeassistant.helpers import selector
 from .const import CONF_ENTITIES, DOMAIN
 
 
-class KarlConfigFlow(ConfigFlow, domain=DOMAIN):
+class CaliConfigFlow(ConfigFlow, domain=DOMAIN):
     """Einmalige Einrichtung – die eigentliche Freigabe passiert in den Optionen."""
 
     VERSION = 1
@@ -29,16 +29,16 @@ class KarlConfigFlow(ConfigFlow, domain=DOMAIN):
         if self._async_current_entries():
             return self.async_abort(reason="single_instance_allowed")
         if user_input is not None:
-            return self.async_create_entry(title="Karl", data={})
+            return self.async_create_entry(title="Cali", data={})
         return self.async_show_form(step_id="user")
 
     @staticmethod
     @callback
     def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
-        return KarlOptionsFlow()
+        return CaliOptionsFlow()
 
 
-class KarlOptionsFlow(OptionsFlow):
+class CaliOptionsFlow(OptionsFlow):
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:

@@ -1,0 +1,24 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Cali verbinden",
+        "description": "Richtet die Gegenstelle für die Cali-Desktop-Assistentin ein. Welche Entitäten Cali sehen und steuern darf, legst du danach über die Optionen dieser Integration oder das Label „cali“ fest."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Cali ist bereits eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Für Cali freigegebene Entitäten",
+        "description": "Diese Entitäten darf Cali sehen und (soweit erlaubt) steuern. Zusätzlich sind immer alle Entitäten und Geräte mit dem Label „cali“ freigegeben.",
+        "data": {
+          "entities": "Entitäten"
+        }
+      }
+    }
+  }
+}
