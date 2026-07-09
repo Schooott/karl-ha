@@ -1,6 +1,10 @@
-# Cali für Home Assistant
+<p align="center">
+  <img src="custom_brands/custom_integrations/cali/icon@2x.png" width="160" alt="Cali" />
+</p>
 
-Gegenstelle für [Cali](https://github.com/schooott), die macOS-Desktop-Assistentin:
+<h1 align="center">Cali für Home Assistant</h1>
+
+Gegenstelle für Cali, die macOS-Desktop-Assistentin:
 Entities gezielt freigeben, Aktionen mit serverseitiger Whitelist ausführen und
 Cali als Benachrichtigungsziel in Automationen nutzen.
 
@@ -52,3 +56,13 @@ data:
 - `cali/entities` – freigegebene Entities, kompakt (Name, Bereich, Zustand, erlaubte Aktionen)
 - `cali/action` – `{entity_id, action, params?}`, serverseitig whitelisted
 - `cali/subscribe` – pusht `notify`-Events (aus `cali.speak`) und `state`-Updates freigegebener Entities
+
+## Icon in HACS / Home Assistant
+
+Die Icons kommen zentral aus dem [home-assistant/brands](https://github.com/home-assistant/brands)-Repo.
+Die fertigen Dateien liegen unter `custom_brands/custom_integrations/cali/` –
+für die Anzeige einmalig als PR einreichen:
+
+1. https://github.com/home-assistant/brands forken
+2. Ordner `custom_integrations/cali/` mit `icon.png` (256×256) und `icon@2x.png` (512×512) anlegen (Web-UI: „Add file → Upload files“)
+3. PR erstellen – nach dem Merge zeigen HACS und HA das Logo automatisch.
