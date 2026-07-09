@@ -2,63 +2,72 @@
   <img src="custom_components/cali/brand/icon@2x.png" width="160" alt="Cali" />
 </p>
 
-<h1 align="center">Cali für Home Assistant</h1>
+<h1 align="center">Cali for Home Assistant</h1>
 
-Gegenstelle für Cali, die macOS-Desktop-Assistentin:
-Entities gezielt freigeben, Aktionen mit serverseitiger Whitelist ausführen und
-Cali als Benachrichtigungsziel in Automationen nutzen.
+**Cali** is a voice-controlled desktop companion for macOS — a small animated
+character with glowing neon eyes that lives at the top edge of your screen.
+You talk to her, she talks back (Claude as the brain, ElevenLabs as the voice),
+shows her mood through expressive eye glyphs, morphs into little icons when she
+acts, and dances when your music plays.
+
+This integration is Cali's Home Assistant counterpart. It lets her:
+
+- **See and control your smart home** — but only what you explicitly expose
+- **Act safely** — every action passes a server-side whitelist (locks and alarm
+  panels are always read-only)
+- **Stay up to date** — state changes of exposed entities are pushed to her live
+- **Speak up** — use `cali.speak` in any automation to have her announce things
+  ("The washing machine is done") with a matching facial expression
 
 ## Installation
 
-**Via HACS (empfohlen):**
-1. HACS → drei Punkte oben rechts → *Benutzerdefinierte Repositories*
-2. `https://github.com/schooott/cali-ha` als Typ *Integration* hinzufügen
-3. „Cali" installieren, Home Assistant neu starten
-4. Einstellungen → Geräte & Dienste → *Integration hinzufügen* → **Cali**
+**Via HACS (recommended):**
 
-**Manuell:** `custom_components/cali/` nach `config/custom_components/cali/`
-kopieren und neu starten.
+1. HACS → three-dot menu → *Custom repositories*
+2. Add `https://github.com/Schooott/cali-ha` as type *Integration*
+3. Install **Cali**, restart Home Assistant
+4. Settings → Devices & Services → *Add Integration* → **Cali**
 
-## Authentifizierung von Cali (der Mac-App)
+**Manually:** copy `custom_components/cali/` into `config/custom_components/cali/`
+and restart.
 
-1. In HA einen eigenen Benutzer **cali** anlegen (Einstellungen → Personen →
-   Benutzer, *kein* Administrator, „Nur lokales Netzwerk" aus, falls Nabu Casa
-   genutzt wird).
-2. Als dieser Benutzer einmal anmelden → Profil → Sicherheit →
-   **Langlebiges Zugriffstoken** erstellen.
-3. Token + HA-URL(s) in Calis Einstellungen eintragen.
+## Authentication (for the Cali macOS app)
 
-## Entities freigeben
+1. Create a dedicated Home Assistant user, e.g. **cali** (Settings → People →
+   Users, *not* an administrator).
+2. Log in as that user once → Profile → Security → create a
+   **Long-lived access token**.
+3. Enter the token and your HA URL(s) in Cali's settings on the Mac.
 
-Zwei Wege, kombinierbar:
+## Exposing entities
 
-- **Label `cali`** auf Entities oder ganze Geräte setzen (gut für Bulk).
-- Integrations-**Optionen** → Entity-Picker (gut für Einzelfälle).
+Two ways, freely combinable:
 
-Alles andere ist für Cali unsichtbar. Schlösser und Alarmanlagen sind
-grundsätzlich **read-only**, auch wenn sie freigegeben sind – die
-Aktions-Whitelist liegt serverseitig in dieser Integration.
+- Put the label **`cali`** on entities or whole devices (great for bulk)
+- Pick individual entities in the integration's **options**
 
-## Cali als Benachrichtigungsziel
+Everything else is invisible to Cali. Locks and alarm control panels are
+**read-only** even when exposed — the action whitelist is enforced server-side
+by this integration.
 
-In jeder Automation als Aktion **„Cali sprechen lassen"** (`cali.speak`) wählen:
+## Using Cali as a notification target
+
+Pick the **"Cali: speak"** action (`cali.speak`) in any automation:
 
 ```yaml
 action: cali.speak
 data:
-  message: "Die Waschmaschine ist fertig."
-  emotion: happy   # optional: neutral, happy, wink, love, surprised, crazy, sceptic, tired, sad, denying, angry, broken
-  wake: true       # Cali einblenden, falls versteckt
+  message: "The washing machine is done."
+  emotion: happy   # optional, one of the 12 below
+  wake: true       # bring Cali out if she is hidden
 ```
 
-## API (für den Cali-Client)
+Available emotions: `neutral`, `happy`, `wink`, `love`, `surprised`, `crazy`,
+`sceptic`, `tired`, `sad`, `denying`, `angry`, `broken`.
 
-- `cali/entities` – freigegebene Entities, kompakt (Name, Bereich, Zustand, erlaubte Aktionen)
-- `cali/action` – `{entity_id, action, params?}`, serverseitig whitelisted
-- `cali/subscribe` – pusht `notify`-Events (aus `cali.speak`) und `state`-Updates freigegebener Entities
+## WebSocket API (used by the Cali app)
 
-## Icon in Home Assistant
-
-Die Icons liegen direkt in der Integration (`custom_components/cali/brand/`) und
-werden ab Home Assistant 2026.3 über die lokale Brands-API ausgeliefert – kein
-PR ans brands-Repo nötig.
+- `cali/entities` — exposed entities, compact (name, area, state, allowed actions)
+- `cali/action` — `{entity_id, action, params?}`, whitelisted server-side
+- `cali/subscribe` — pushes `notify` events (from `cali.speak`), `state` updates
+  of exposed entities, and `entities_changed` when the exposure set changes
