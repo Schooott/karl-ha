@@ -14,7 +14,7 @@
     "step": {
       "init": {
         "title": "Für Cali freigegebene Entitäten",
-        "description": "Diese Entitäten darf Cali sehen und (soweit erlaubt) steuern. Zusätzlich sind immer alle Entitäten und Geräte mit dem Label „cali“ freigegeben.",
+        "description": "Diese Entitäten darf Cali sehen und (soweit erlaubt) steuern. Zusätzlich sind immer alle Entitäten und Geräte mit dem Label „cali“ freigegeben.\n\n**Cali sieht aktuell {count} Entitäten:**\n{exposed}",
         "data": {
           "entities": "Entitäten"
         }
